@@ -110,12 +110,9 @@ files:
     Title or description in returned dict do not seem to be correct.\")\n\n\nif __name__\
     \ == '__main__':\n    WebScraperTest().run_tests()\n"
   learner_created: false
-- name: myscript.py
-  visible: true
-  learner_created: true
 feedback_link: https://hyperskill.org/projects/145/stages/782/implement#comment
 status: Solved
 feedback:
   message: Congratulations!
-  time: Thu, 22 Jul 2021 23:30:18 UTC
+  time: Thu, 22 Jul 2021 23:32:09 UTC
 record: 1
