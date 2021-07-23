@@ -164,6 +164,6 @@ feedback_link: https://hyperskill.org/projects/145/stages/784/implement#comment
 status: Failed
 feedback:
   message: "Wrong answer in test #1\n\nA wrong number of files with articles was found.\
-    \ \n20 files were found, 4 files were expected."
-  time: Fri, 23 Jul 2021 04:29:37 UTC
+    \ \n0 files were found, 8 files were expected."
+  time: Fri, 23 Jul 2021 18:46:33 UTC
 record: 4
