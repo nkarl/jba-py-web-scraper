@@ -15,6 +15,8 @@ def scrapeIt():
     else:
         try:
             r = requests.get(url, headers=default_lang)   # make request
+            if r.status_code > 200 + 10:
+                raise ValueError("Invalid status code.")
             soup = BeautifulSoup(r.content, "html.parser")
             title = soup.find("title").text.split(' (')[0]
             description = soup.find("meta", property=re.compile("description")).attrs['content'].split('. ')[2:]
