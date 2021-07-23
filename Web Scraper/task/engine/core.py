@@ -3,6 +3,7 @@ import _io
 import requests
 import functools
 import re
+import os.path
 
 from bs4 import BeautifulSoup
 
@@ -34,6 +35,21 @@ def writeContent(content: bytes, out: _io.BufferedWriter):
     out.write(content)
 
 
-def scrapeURLs(urls: [str]):
-    for url in urls:
-        r = getLinkResponse(url).content
+def getArticleTitle(content: bytes) -> str:
+    soup = BeautifulSoup(content, "html.parser")
+    title = getArticleTitle(soup.find("title").text)
+    return transformTitle(title)
+
+
+def transformTitle(title: str):
+    return '_'.join(title.split(' |')[0].split(' '))
+
+
+def scrapeURLs(links: [str]):
+    for link in links:
+        content = getLinkResponse(link).content
+        filename = getArticleTitle(content)
+        filename += ".txt"
+        with open(filename, "wb") as file:
+            file.write(content)
+    pass
