@@ -1,118 +1,119 @@
 type: edu
 files:
+- name: tests.py
+  visible: true
+  text: |
+    import requests
+    from hstest.check_result import CheckResult
+    from hstest.stage_test import StageTest
+    from hstest.test_case import TestCase
+
+
+    class WebScraperTest(StageTest):
+        def generate(self):
+            return [
+                TestCase(stdin="http://api.quotable.io/quotes/-CzNrWMGIg8V",
+                         check_function=self.check_valid_res),
+
+                TestCase(stdin="http://api.quotable.io/asdfgh",
+                         check_function=self.check_not_valid_res),
+
+                TestCase(stdin="http://api.quotable.io/authors",
+                         check_function=self.check_not_valid_res)
+            ]
+
+        def check_valid_res(self, reply, attach=None) -> CheckResult:
+            try:
+                qod = requests.get("http://api.quotable.io/quotes/-CzNrWMGIg8V").json()["content"]
+            except Exception:
+                return CheckResult.wrong("An error occurred when tests tried to connect to the Internet page.\n"
+                                         "Please, try again.")
+            if qod in reply:
+                return CheckResult.correct()
+            elif isinstance(reply, str):
+                return CheckResult.wrong("Couldn't find the exact quote in the result.")
+            elif isinstance(reply, (list, dict)):
+                return CheckResult.wrong("Make sure you extracted the quote from the json body correctly.")
+            else:
+                return CheckResult.wrong("The result doesn't look like a quote... at all.")
+
+        def check_not_valid_res(self, reply, attach=None):
+            if all(x in reply.lower() for x in ("invalid", "resource")):
+                return CheckResult.correct()
+            else:
+                return CheckResult.wrong("If the resource is invalid, the user should get informed exactly on this.")
+
+
+    if __name__ == '__main__':
+        WebScraperTest().run_tests()
+  learner_created: true
 - name: scraper.py
   visible: true
-  text: |-
-    """Module: Web Scraper"""
-    import json
-    import requests
-
-
-    class MyRequest:
-        def __init__(self, url: str):
-            self.url = url
-            self.response = requests.get(url)
-            self.raw = self.response.json()
-
-        def content(self):
-            try:
-                content = self.raw.get('content', None)
-                assert content is not None
-                print(content)
-            except AssertionError:
-                print("Invalid quote resource!")
-
-
-    def get_content(url: str):
-        r = requests.get(url)
-        requested_json = json.loads(r.text)
-        try:
-            content = requested_json.get('content', None)
-            assert content is not None
-            print(content)
-        except AssertionError:
-            print("Invalid quote resource!")
-
-
-    if __name__ == "__main__":
-        link = input()
-        # myRequest = MyRequest(link)
-        # myRequest.content()
-        get_content(link)
   learner_created: false
-- name: tests.py
-  visible: false
-  text: "import ast\nimport re\n\nfrom hstest.check_result import CheckResult\nfrom\
-    \ hstest.stage_test import StageTest\nfrom hstest.test_case import TestCase\n\n\
-    \nclass WebScraperTest(StageTest):\n    def generate(self):\n        return [TestCase(stdin=\"\
-    https://www.imdb.com/title/tt10048342/\", check_function=self.check_queens_gambit,\n\
-    \                         time_limit=50000),\n                TestCase(stdin=\"\
-    https://www.imdb.com/title/tt0068646/\", check_function=self.check_godfather,\n\
-    \                         time_limit=50000),\n                TestCase(stdin=\"\
-    https://www.imdb.com/name/nm0001191/\", check_function=self.check_incorrect_url,\n\
-    \                         time_limit=50000),\n                TestCase(stdin=\"\
-    https://www.google.com/\", check_function=self.check_incorrect_url, time_limit=50000)]\n\
-    \n    def check_incorrect_url(self, reply, attach=None):\n        if \"Invalid\
-    \ movie page!\" in reply:\n            return CheckResult.correct()\n        else:\n\
-    \            return CheckResult.wrong(\"\"\"If the link does not contain movie\
-    \ info or not an IMDB resource, \n            please respond with 'Invalid movie\
-    \ page!' message!\"\"\")\n\n    def check_queens_gambit(self, reply, attach=None):\n\
-    \        possible_descriptions = [\"prodigious introvert Beth Harmon discovers\
-    \ and masters the game of chess\"]\n        output = re.search('({.+})', reply)\n\
-    \        if output is None:\n            return CheckResult.wrong(\"Output dictionary\
-    \ was expected.\\n\"\n                                     \"However, it was not\
-    \ found.\")\n        try:\n            reply_dict = ast.literal_eval(output.group(0))\n\
-    \        except (AttributeError, ValueError, SyntaxError):\n            return\
-    \ CheckResult.wrong(\"An error occurred while your output was being parsed.\\\
-    n\"\n                                     \"Make sure you output a dictionary\
-    \ and its keys and values contain no HTML tags.\")\n        if 'title' not in\
-    \ reply_dict:\n            return CheckResult.wrong(\"There's no \\'title\\' field\
-    \ in your output.\")\n        if 'description' not in reply_dict:\n          \
-    \  return CheckResult.wrong(\"There's no \\'description\\' field in your output.\"\
-    )\n        user_description = reply_dict[\"description\"]\n        title = reply_dict[\"\
-    title\"]\n        if not title or not user_description:\n            return CheckResult.wrong(\"\
-    Seems like there is a title or a description missing in the output dictionary.\"\
-    )\n        if type(user_description) != str or type(title) != str:\n         \
-    \   return CheckResult.wrong(\"The values of keys 'title' and 'description' should\
-    \ be strings.\\n\"\n                                     \"However, it seems that\
-    \ in your output the type of one or both of these values isn't string.\")\n  \
-    \      correct_descriptions = sum([description.lower().strip() in user_description.lower().strip()\
-    \ for description in possible_descriptions]) > 0\n        if \"The Queen's Gambit\"\
-    \ in title and correct_descriptions:\n            return CheckResult.correct()\n\
-    \        else:\n            return CheckResult.wrong(\"Title or description in\
-    \ returned dict do not seem to be correct.\")\n\n    def check_godfather(self,\
-    \ reply, attach=None):\n        possible_descriptions = [\"An organized crime\
-    \ dynasty's aging patriarch transfers control of his clandestine empire to his\
-    \ reluctant son\",\n                                 \"The aging patriarch of\
-    \ an organized crime dynasty transfers control of his clandestine empire to his\
-    \ reluctant son.\"]\n        output = re.search('({.+})', reply)\n        if output\
-    \ is None:\n            return CheckResult.wrong(\"Output dictionary was expected.\\\
-    n\"\n                                     \"However, it was not found.\")\n  \
-    \      try:\n            reply_dict = ast.literal_eval(output.group(0))\n    \
-    \    except (AttributeError, ValueError, SyntaxError):\n            return CheckResult.wrong(\"\
-    An error occurred while your output was being parsed.\\n\"\n                 \
-    \                    \"Make sure you output a dictionary and its keys and values\
-    \ contain no HTML tags.\")\n        if 'title' not in reply_dict:\n          \
-    \  return CheckResult.wrong(\"There's no \\'title\\' field in your output.\")\n\
-    \        if 'description' not in reply_dict:\n            return CheckResult.wrong(\"\
-    There's no \\'description\\' field in your output.\")\n        title = reply_dict.get(\"\
-    title\")\n        desc = reply_dict.get(\"description\")\n        if not title\
-    \ or not desc:\n            return CheckResult.wrong(\"Seems like there is a title\
-    \ or a description missing in the output dictionary.\")\n        user_description\
-    \ = reply_dict[\"description\"]\n        if type(user_description) != str or type(title)\
-    \ != str:\n            return CheckResult.wrong(\"The values of keys 'title' and\
-    \ 'description' should be strings.\\n\"\n                                    \
-    \ \"However, it seems that in your output the type of one or both of these values\
-    \ isn't string.\")\n        correct_descriptions = sum([description.lower().strip()\
-    \ in user_description.lower().strip() for description in possible_descriptions])\
-    \ > 0\n        if \"Godfather\" in reply_dict[\"title\"] and correct_descriptions:\n\
-    \            return CheckResult.correct()\n        else:\n            return CheckResult.wrong(\"\
-    Title or description in returned dict do not seem to be correct.\")\n\n\nif __name__\
-    \ == '__main__':\n    WebScraperTest().run_tests()\n"
-  learner_created: false
+- name: 8% of researchers in Dutch survey have falsified or fabricated dat.txt
+  visible: true
+  learner_created: true
+- name: How the Delta variant achieves its ultrafast sprea.txt
+  visible: true
+  learner_created: true
+- name: Tonic_prime-boost_of_STING_signalling_mediates_Niemann–Pick_disease_type_C.txt
+  visible: true
+  learner_created: true
+- name: Gut_cytokines_modulate_olfaction_through_metabolic_reprogramming_of_glia.txt
+  visible: true
+  learner_created: true
+- name: The_surprising_place_where_pot_farming_first_blossomed.txt
+  visible: true
+  learner_created: true
+- name: COVID_and_mass_sport_event.txt
+  visible: true
+  learner_created: true
+- name: Rubbish-raiding_parrots_take_lessons_from_co-conspirators.txt
+  visible: true
+  learner_created: true
+- name: Highly_accurate_protein_structure_prediction_for_the_human_proteome.txt
+  visible: true
+  learner_created: true
+- name: COVID vaccines have higher approval in less affluent countrie.txt
+  visible: true
+  learner_created: true
+- name: How the US is rebooting gun violence researc.txt
+  visible: true
+  learner_created: true
+- name: A_natively_flexible_32-bit_Arm_microprocessor.txt
+  visible: true
+  learner_created: true
+- name: EGFR_activation_limits_the_response_of_liver_cancer_to_lenvatinib.txt
+  visible: true
+  learner_created: true
+- name: Phenotype,_specificity_and_avidity_of_antitumour_CD8+_T_cells_in_melanoma.txt
+  visible: true
+  learner_created: true
+- name: Pauli-limit_violation_and_re-entrant_superconductivity_in_moiré_graphene.txt
+  visible: true
+  learner_created: true
+- name: Free-electron_lasing_at_27_nanometres_based_on_a_laser_wakefield_accelerator.txt
+  visible: true
+  learner_created: true
+- name: How_to_win_big_for_the_climat.txt
+  visible: true
+  learner_created: true
+- name: SAR1B_senses_leucine_levels_to_regulate_mTORC1_signalling.txt
+  visible: true
+  learner_created: true
+- name: A_telescope_watches_as_a_black_hole_spews_stuff_into_space.txt
+  visible: true
+  learner_created: true
+- name: DeepMind’s AI predicts structures for a vast trove of protein.txt
+  visible: true
+  learner_created: true
+- name: The_nightside_cloud-top_circulation_of_the_atmosphere_of_Venus.txt
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/145/stages/782/implement#comment
-status: Solved
+status: Failed
 feedback:
-  message: Congratulations!
-  time: Thu, 22 Jul 2021 23:32:09 UTC
-record: 1
+  message: "Wrong answer in test #1\n\nA wrong number of files with articles was found.\
+    \ \n20 files were found, 4 files were expected."
+  time: Fri, 23 Jul 2021 05:45:09 UTC
+record: 2
