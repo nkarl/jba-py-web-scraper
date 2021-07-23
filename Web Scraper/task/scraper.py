@@ -41,7 +41,7 @@ def scrapeIt(url: str):
         else:
             if r.content:
                 content = r.content
-                with open("source.html", "wb") as outfile:
+                with open("source.html", "wb", encoding='utf-8') as outfile:
                     outfile.write(content)
                 print("Content saved.")
     except ValueError:

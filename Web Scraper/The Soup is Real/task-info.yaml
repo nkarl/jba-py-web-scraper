@@ -171,5 +171,30 @@ files:
     </html>
   learner_created: true
 feedback_link: https://hyperskill.org/projects/145/stages/784/implement#comment
-status: Unchecked
+status: Failed
+feedback:
+  message: |-
+    Exception in test #1
+
+    Traceback (most recent call last):
+      File "venv\lib\site-packages\hstest\testing\execution\main_module_executor.py", line 33, in _invoke_method
+        runpy.run_module(
+      File "Web Scraper\task\scraper.py", line 54, in <module>
+        scrapeIt(link)
+      File "Web Scraper\task\scraper.py", line 37, in scrapeIt
+        r = requests.get(url, headers=DEFAULT_LANG)
+      File "venv\lib\site-packages\requests\api.py", line 76, in get
+        return request('get', url, params=params, **kwargs)
+      File "venv\lib\site-packages\requests\api.py", line 61, in request
+        return session.request(method=method, url=url, **kwargs)
+      File "venv\lib\site-packages\requests\sessions.py", line 516, in request
+        prep = self.prepare_request(req)
+      File "venv\lib\site-packages\requests\sessions.py", line 449, in prepare_request
+        p.prepare(
+      File "venv\lib\site-packages\requests\models.py", line 314, in prepare
+        self.prepare_url(url, params)
+      File "venv\lib\site-packages\requests\models.py", line 388, in prepare_url
+        raise MissingSchema(error)
+    requests.exceptions.MissingSchema: Invalid URL '': No schema supplied. Perhaps you meant http://?
+  time: Fri, 23 Jul 2021 02:22:14 UTC
 record: -1
