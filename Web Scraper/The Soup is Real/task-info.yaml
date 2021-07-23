@@ -154,53 +154,136 @@ files:
     if __name__ == '__main__':
         WebScraperTest().run_tests()
   learner_created: false
-- name: source.html
-  visible: true
-  text: |
-    <html>
-    <head>
-      <title>warming up</title>
-      <link rel="stylesheet" type="text/css" href="../style.css">
-    </head>
-    <body>
-    <center>
-    <img src="calc.jpg"><br>
-    <font color="gold">
-    <p>Hint: try to change the URL address.
-    </body>
-    </html>
-  learner_created: true
 - name: engine/__init__.py
   visible: true
   learner_created: true
 - name: engine/core.py
   visible: true
   learner_created: true
+- name: output/8% of researchers in Dutch survey have falsified or fabricated dat.txt
+  visible: true
+  learner_created: true
+- name: output/How the Delta variant achieves its ultrafast sprea.txt
+  visible: true
+  learner_created: true
+- name: output/Gut_cytokines_modulate_olfaction_through_metabolic_reprogramming_of_glia.txt
+  visible: true
+  learner_created: true
+- name: output/How_to_win_big_for_the_climat.txt
+  visible: true
+  learner_created: true
+- name: output/Tonic_prime-boost_of_STING_signalling_mediates_Niemann–Pick_disease_type_C.txt
+  visible: true
+  learner_created: true
+- name: output/The_nightside_cloud-top_circulation_of_the_atmosphere_of_Venus.txt
+  visible: true
+  learner_created: true
+- name: output/The_surprising_place_where_pot_farming_first_blossomed.txt
+  visible: true
+  learner_created: true
+- name: output/COVID_and_mass_sport_event.txt
+  visible: true
+  learner_created: true
+- name: output/SAR1B_senses_leucine_levels_to_regulate_mTORC1_signalling.txt
+  visible: true
+  learner_created: true
+- name: output/A_telescope_watches_as_a_black_hole_spews_stuff_into_space.txt
+  visible: true
+  learner_created: true
+- name: output/Rubbish-raiding_parrots_take_lessons_from_co-conspirators.txt
+  visible: true
+  learner_created: true
+- name: output/Highly_accurate_protein_structure_prediction_for_the_human_proteome.txt
+  visible: true
+  learner_created: true
+- name: output/COVID vaccines have higher approval in less affluent countrie.txt
+  visible: true
+  learner_created: true
+- name: output/How the US is rebooting gun violence researc.txt
+  visible: true
+  learner_created: true
+- name: output/DeepMind’s AI predicts structures for a vast trove of protein.txt
+  visible: true
+  learner_created: true
+- name: output/A_natively_flexible_32-bit_Arm_microprocessor.txt
+  visible: true
+  learner_created: true
+- name: output/EGFR_activation_limits_the_response_of_liver_cancer_to_lenvatinib.txt
+  visible: true
+  learner_created: true
+- name: output/Pauli-limit_violation_and_re-entrant_superconductivity_in_moiré_graphene.txt
+  visible: true
+  learner_created: true
+- name: output/Phenotype,_specificity_and_avidity_of_antitumour_CD8+_T_cells_in_melanoma.txt
+  visible: true
+  learner_created: true
+- name: output/Free-electron_lasing_at_27_nanometres_based_on_a_laser_wakefield_accelerator.txt
+  visible: true
+  learner_created: true
+- name: 8% of researchers in Dutch survey have falsified or fabricated dat.txt
+  visible: true
+  learner_created: true
+- name: How the Delta variant achieves its ultrafast sprea.txt
+  visible: true
+  learner_created: true
+- name: Gut_cytokines_modulate_olfaction_through_metabolic_reprogramming_of_glia.txt
+  visible: true
+  learner_created: true
+- name: How_to_win_big_for_the_climat.txt
+  visible: true
+  learner_created: true
+- name: Tonic_prime-boost_of_STING_signalling_mediates_Niemann–Pick_disease_type_C.txt
+  visible: true
+  learner_created: true
+- name: The_nightside_cloud-top_circulation_of_the_atmosphere_of_Venus.txt
+  visible: true
+  learner_created: true
+- name: The_surprising_place_where_pot_farming_first_blossomed.txt
+  visible: true
+  learner_created: true
+- name: COVID_and_mass_sport_event.txt
+  visible: true
+  learner_created: true
+- name: SAR1B_senses_leucine_levels_to_regulate_mTORC1_signalling.txt
+  visible: true
+  learner_created: true
+- name: A_telescope_watches_as_a_black_hole_spews_stuff_into_space.txt
+  visible: true
+  learner_created: true
+- name: Rubbish-raiding_parrots_take_lessons_from_co-conspirators.txt
+  visible: true
+  learner_created: true
+- name: Highly_accurate_protein_structure_prediction_for_the_human_proteome.txt
+  visible: true
+  learner_created: true
+- name: COVID vaccines have higher approval in less affluent countrie.txt
+  visible: true
+  learner_created: true
+- name: How the US is rebooting gun violence researc.txt
+  visible: true
+  learner_created: true
+- name: DeepMind’s AI predicts structures for a vast trove of protein.txt
+  visible: true
+  learner_created: true
+- name: A_natively_flexible_32-bit_Arm_microprocessor.txt
+  visible: true
+  learner_created: true
+- name: EGFR_activation_limits_the_response_of_liver_cancer_to_lenvatinib.txt
+  visible: true
+  learner_created: true
+- name: Pauli-limit_violation_and_re-entrant_superconductivity_in_moiré_graphene.txt
+  visible: true
+  learner_created: true
+- name: Phenotype,_specificity_and_avidity_of_antitumour_CD8+_T_cells_in_melanoma.txt
+  visible: true
+  learner_created: true
+- name: Free-electron_lasing_at_27_nanometres_based_on_a_laser_wakefield_accelerator.txt
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/projects/145/stages/784/implement#comment
 status: Failed
 feedback:
-  message: |-
-    Exception in test #1
-
-    Traceback (most recent call last):
-      File "venv\lib\site-packages\hstest\testing\execution\main_module_executor.py", line 33, in _invoke_method
-        runpy.run_module(
-      File "Web Scraper\task\scraper.py", line 54, in <module>
-        scrapeIt(link)
-      File "Web Scraper\task\scraper.py", line 37, in scrapeIt
-        r = requests.get(url, headers=DEFAULT_LANG)
-      File "venv\lib\site-packages\requests\api.py", line 76, in get
-        return request('get', url, params=params, **kwargs)
-      File "venv\lib\site-packages\requests\api.py", line 61, in request
-        return session.request(method=method, url=url, **kwargs)
-      File "venv\lib\site-packages\requests\sessions.py", line 516, in request
-        prep = self.prepare_request(req)
-      File "venv\lib\site-packages\requests\sessions.py", line 449, in prepare_request
-        p.prepare(
-      File "venv\lib\site-packages\requests\models.py", line 314, in prepare
-        self.prepare_url(url, params)
-      File "venv\lib\site-packages\requests\models.py", line 388, in prepare_url
-        raise MissingSchema(error)
-    requests.exceptions.MissingSchema: Invalid URL '': No schema supplied. Perhaps you meant http://?
-  time: Fri, 23 Jul 2021 02:22:14 UTC
+  message: "Wrong answer in test #1\n\nA wrong number of files with articles was found.\
+    \ \n20 files were found, 4 files were expected."
+  time: Fri, 23 Jul 2021 04:29:37 UTC
 record: -1

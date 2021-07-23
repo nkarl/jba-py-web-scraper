@@ -15,13 +15,16 @@ NATURE_SOURCE = "https://www.nature.com"
 
 def getLinkResponse(url: str) -> requests.models.Response:
     r = requests.get(url, headers=DEFAULT_LANG)
-    try:
-        if "20" not in str(r.status_code):
-            raise ValueError
-    except ValueError:
+    if "20" not in str(r.status_code):
         print(f"The URL returned {r.status_code}")
-    else:
-        return r
+    return r
+    # try:
+    #     if "20" not in str(r.status_code):
+    #         raise ValueError
+    # except ValueError:
+    #     print(f"The URL returned {r.status_code}")
+    # else:
+    #     return r
 
 
 def collectLinks(r: requests.models.Response) -> [str]:
@@ -31,25 +34,25 @@ def collectLinks(r: requests.models.Response) -> [str]:
     return articles
 
 
-def writeContent(content: bytes, out: _io.BufferedWriter):
-    out.write(content)
-
-
-def getArticleTitle(content: bytes) -> str:
+def transformTitle(content: bytes) -> str:
     soup = BeautifulSoup(content, "html.parser")
-    title = getArticleTitle(soup.find("title").text)
-    return transformTitle(title)
+    title = soup.find("title").text
+    delim = ['|', ':']
+    for d in delim:
+        if d in title:
+            title = '_'.join(title.split(d)[0].split(' '))
+    return title[0:-1] + '.txt'
 
 
-def transformTitle(title: str):
-    return '_'.join(title.split(' |')[0].split(' '))
-
-
-def scrapeURLs(links: [str]):
+def writeArticles(links: [str]):
     for link in links:
         content = getLinkResponse(link).content
-        filename = getArticleTitle(content)
-        filename += ".txt"
+        filename = transformTitle(content)
         with open(filename, "wb") as file:
             file.write(content)
-    pass
+
+
+def scrapeArticles(entry: str):
+    entry_r = getLinkResponse(entry)
+    links = collectLinks(entry_r)
+    writeArticles(links)
