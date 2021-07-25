@@ -1,5 +1,11 @@
 type: edu
 files:
+- name: engine/__init__.py
+  visible: true
+  learner_created: true
+- name: engine/core.py
+  visible: true
+  learner_created: true
 - name: tests.py
   visible: true
   text: "import ast\nimport re\n\nfrom hstest.check_result import CheckResult\nfrom\
@@ -76,7 +82,10 @@ files:
 feedback_link: https://hyperskill.org/projects/145/stages/782/implement#comment
 status: Failed
 feedback:
-  message: "Wrong answer in test #1\n\nA wrong number of files with articles was found.\
-    \ \n20 files were found, 4 files were expected."
-  time: Fri, 23 Jul 2021 05:45:09 UTC
+  message: |-
+    Wrong answer in test #1
+
+    Output dictionary was expected.
+    However, it was not found.
+  time: Sun, 25 Jul 2021 22:46:23 UTC
 record: 2
