@@ -1,8 +1,5 @@
 type: edu
 files:
-- name: engine/__init__.py
-  visible: true
-  learner_created: true
 - name: engine/core.py
   visible: true
   learner_created: true
