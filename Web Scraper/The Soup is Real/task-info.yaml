@@ -1,8 +1,5 @@
 type: edu
 files:
-- name: source.html
-  visible: true
-  learner_created: true
 - name: scraper.py
   visible: true
   text: |
@@ -160,19 +157,19 @@ files:
 - name: engine/core.py
   visible: true
   learner_created: true
-- name: Bullying_and_harassment_are_rife_in_astronomy_poll_suggests.txt
-  visible: true
-  learner_created: true
 - name: NASA_investigates_renaming_James_Webb_telescope_after_antiLGBT_claims.txt
   visible: true
   learner_created: true
 - name: Single_chip_tests_thousands_of_enzyme_mutations_at_once.txt
   visible: true
   learner_created: true
-- name: COVID_vaccines_have_higher_approval_in_lessaffluent_countries.txt
+- name: China’s_space_station_is_preparing_to_host_1000_scientific_experiments.txt
   visible: true
   learner_created: true
-- name: China’s_space_station_is_preparing_to_host_1000_scientific_experiments.txt
+- name: Bullying_and_harassment_are_rife_in_astronomy_poll_suggests.txt
+  visible: true
+  learner_created: true
+- name: COVID_vaccines_have_higher_approval_in_lessaffluent_countries.txt
   visible: true
   learner_created: true
 - name: COVID_and_mass_sport_events_early_studies_yield_limited_insights.txt
@@ -185,5 +182,5 @@ feedback_link: https://hyperskill.org/projects/145/stages/784/implement#comment
 status: Solved
 feedback:
   message: Congratulations!
-  time: Mon, 26 Jul 2021 17:04:01 UTC
+  time: Mon, 26 Jul 2021 17:13:42 UTC
 record: 4

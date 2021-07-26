@@ -2,13 +2,14 @@ import glob
 import os
 import random
 import re
-import shutil
 import string
 
 import requests
 from bs4 import BeautifulSoup
 from furl import furl
-from hstest import *
+from hstest.check_result import CheckResult
+from hstest.stage_test import StageTest
+from hstest.test_case import TestCase
 
 
 class NatureScraper:
@@ -29,8 +30,8 @@ class NatureScraper:
         try:
             articles_resp = requests.get(url)
         except Exception:
-            raise WrongAnswer(f"ConnectionError occurred when tests tried to reach the page \'{url}\'.\n"
-                              f"Please try running tests again.")
+            return CheckResult.wrong("An error occurred when tests tried to connect to the Internet page.\n"
+                                     "Please, try again.")
         soup = BeautifulSoup(articles_resp.text, "html.parser")
         articles = soup.find_all(self.tag_containing_atricle_type)
         articles = list(filter(lambda x: x.text.strip() == article_type, articles))
@@ -49,67 +50,61 @@ class NatureScraper:
         content = soup.find(self.tag_containing_article_body)
         if title and content:
             return title.text.strip(), content.text.strip()
+        else:
+            return title, content
 
 
 class WebScraperTest(StageTest):
     def generate(self):
-        for name in os.listdir():
-            if os.path.isdir(name) and name.startswith("Page_"):
-                shutil.rmtree(name)
-
-        return [TestCase(stdin="3\nResearch Highlight", attach=(3, "Research Highlight"), time_limit=0),
-                TestCase(stdin="1\nNews & Views", attach=(1, "News & Views"), time_limit=0),
-                TestCase(stdin="2\nNews Feature", attach=(2, "News Feature"), time_limit=0)]
+        txt_files = glob.glob("*.txt")
+        for filename in txt_files:
+            try:
+                os.remove(filename)
+            except FileNotFoundError:
+                pass
+        return [TestCase(time_limit=0)]
 
     def check(self, reply, attach=None):
-        n_pages, article_type = attach
         scraper = NatureScraper()
-        for i in range(1, n_pages + 1):
-            dirname = f"Page_{i}"
-            dirname = os.path.abspath(dirname)
-            if not os.path.exists(dirname):
-                return CheckResult.wrong(f"Impossible to find directory {dirname}")
-            os.chdir(dirname)
-            txt_files = glob.glob("*.txt")
-            url = furl("https://www.nature.com/nature/articles").add({"page": str(i)})
-            article_links = scraper.get_article_links_of_type(url, article_type=article_type)
-            if len(txt_files) != len(article_links):
-                return CheckResult.wrong("A wrong number of files with articles was found in the directory {0}. \n"
-                                         "{1} files were found, {2} files were expected.".format(dirname,
-                                                                                                 len(txt_files),
-                                                                                                 len(article_links)))
-            if article_links:
-                random_val = random.randint(0, len(article_links) - 1)
-                title, content = scraper.get_article_title_and_content(article_links[random_val])
-                content = content.strip()
-                title = f"{title.translate(str.maketrans('', '', string.punctuation)).replace(' ', '_')}.txt"
-                title = os.path.abspath(title)
-                if not os.path.exists(title):
-                    return CheckResult.wrong("A file with the title {0} was expected, but was not found.".format(title))
-                with open(title, "rb") as f:
-                    try:
-                        file_content = f.read().decode('utf-8').strip()
-                    except UnicodeDecodeError:
-                        return CheckResult.wrong("An error occurred when tests tried to read the file \"{0}\"\n"
-                                                 "Please, make sure you save your file in binary format \n"
-                                                 "and encode the saved data using utf-8 encoding.".format(title))
+        txt_files = glob.glob("*.txt")
+        article_links = scraper.get_article_links_of_type("https://www.nature.com/nature/articles")
+        if len(txt_files) != len(article_links):
+            return CheckResult.wrong("A wrong number of files with articles was found. \n"
+                                     "{0} files were found, {1} files were expected.".format(len(txt_files),
+                                                                                             len(article_links)))
 
-                file_content = re.sub('[\r\n]', '', file_content)
-                content = re.sub('[\r\n]', '', content)
-                if file_content != content:
-                    return CheckResult.wrong("Some of the files do not contain the expected article's body. \n"
-                                             "The tests expected the following article:\n"
-                                             f"\"{content}\"\n"
-                                             f"However, the following text was found in the file {title}:\n"
-                                             f"\"{file_content}\"")
-            os.chdir("..")
+        if not article_links:
+            return CheckResult.correct()
+        title, content = None, None
+        while not title or not content:
+            article_n = random.randint(0, len(article_links) - 1)
+            title, content = scraper.get_article_title_and_content(article_links[article_n])
+            if not title or not content:
+                article_links.pop(article_n)
+                if not article_links:
+                    return CheckResult.correct()
+        title = f"{title.translate(str.maketrans('', '', string.punctuation)).replace(' ', '_')}.txt"
+        if not os.path.exists(title):
+            return CheckResult.wrong("A file with the name \"{0}\" was not found.\n"
+                                     "Make sure you remove punctuation and \nreplace the whitespaces with underscores in the titles.".format(
+                title))
+        with open(title, "rb") as f:
             try:
-                shutil.rmtree(dirname)
-            except OSError as e:
-                print(f"The following error occurred when the tests tried to remove directory {dirname}:\n"
-                      f"{e}\n"
-                      f"If you can, please, make it possible to remove the directory.")
-        return CheckResult.correct()
+                file_content = f.read().decode('utf-8').strip()
+            except UnicodeDecodeError:
+                return CheckResult.wrong("An error occurred when tests tried to read the file \"{0}\"\n"
+                                         "Please, make sure you save your file in binary format \n"
+                                         "and encode the saved data using utf-8 encoding.".format(title))
+        file_content = re.sub('[\r\n]', '', file_content)
+        content = re.sub('[\r\n]', '', content)
+        if content in file_content:
+            return CheckResult.correct()
+        else:
+            return CheckResult.wrong("Some of the files do not contain the expected article's body. \n"
+                                     "The tests expected the following article:\n"
+                                     f"\"{content}\"\n"
+                                     f"However, the following text was found in the file {title}:\n"
+                                     f"\"{file_content}\"")
 
 
 if __name__ == '__main__':
