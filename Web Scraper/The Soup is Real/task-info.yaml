@@ -1,5 +1,47 @@
 type: edu
 files:
+- name: source.html
+  visible: true
+  learner_created: true
+- name: scraper.py
+  visible: true
+  text: |
+    """Module: Web Scraper"""
+    import requests
+    from bs4 import BeautifulSoup
+    from dataclasses import dataclass
+
+
+    class MyRequest:
+
+        default_lang = {'Accept-Language': 'en-US,en;q=0.5'}
+
+        def __init__(self, url: str):
+            self.url = url
+            self.r = requests.get(url, headers=self.default_lang)
+            status = self.r.status_code
+            # check if connection is valid
+            if status == 400 or status == 500:
+                raise ValueError(f"Status: {status}. Should recheck response object.")
+            # self.raw = self.response.json()
+
+        def content(self):
+            soup = BeautifulSoup(self.r.content, 'html.parser')
+            result = soup.find("meta")
+            print(dict(result))
+            # try:
+            #     # content = self.raw.get('content', None)
+            #     assert content is not None
+            #     print(content)
+            # except AssertionError:
+            #     print("Invalid movie page!")
+
+
+    if __name__ == "__main__":
+        link = input()
+        myRequest = MyRequest(link)
+        myRequest.content()
+  learner_created: false
 - name: tests.py
   visible: false
   text: |
@@ -115,52 +157,33 @@ files:
     if __name__ == '__main__':
         WebScraperTest().run_tests()
   learner_created: false
-- name: scraper.py
+- name: engine/core.py
   visible: true
-  text: |
-    """Module: Web Scraper"""
-    import requests
-    from bs4 import BeautifulSoup
-    from dataclasses import dataclass
-
-
-    class MyRequest:
-
-        default_lang = {'Accept-Language': 'en-US,en;q=0.5'}
-
-        def __init__(self, url: str):
-            self.url = url
-            self.r = requests.get(url, headers=self.default_lang)
-            status = self.r.status_code
-            # check if connection is valid
-            if status == 400 or status == 500:
-                raise ValueError(f"Status: {status}. Should recheck response object.")
-            # self.raw = self.response.json()
-
-        def content(self):
-            soup = BeautifulSoup(self.r.content, 'html.parser')
-            result = soup.find("meta")
-            print(dict(result))
-            # try:
-            #     # content = self.raw.get('content', None)
-            #     assert content is not None
-            #     print(content)
-            # except AssertionError:
-            #     print("Invalid movie page!")
-
-
-    if __name__ == "__main__":
-        link = input()
-        myRequest = MyRequest(link)
-        myRequest.content()
-  learner_created: false
-- name: source.html
+  learner_created: true
+- name: Bullying_and_harassment_are_rife_in_astronomy_poll_suggests.txt
+  visible: true
+  learner_created: true
+- name: NASA_investigates_renaming_James_Webb_telescope_after_antiLGBT_claims.txt
+  visible: true
+  learner_created: true
+- name: Single_chip_tests_thousands_of_enzyme_mutations_at_once.txt
+  visible: true
+  learner_created: true
+- name: COVID_vaccines_have_higher_approval_in_lessaffluent_countries.txt
+  visible: true
+  learner_created: true
+- name: China’s_space_station_is_preparing_to_host_1000_scientific_experiments.txt
+  visible: true
+  learner_created: true
+- name: COVID_and_mass_sport_events_early_studies_yield_limited_insights.txt
+  visible: true
+  learner_created: true
+- name: DeepMind’s_AI_predicts_structures_for_a_vast_trove_of_proteins.txt
   visible: true
   learner_created: true
 feedback_link: https://hyperskill.org/projects/145/stages/784/implement#comment
-status: Failed
+status: Solved
 feedback:
-  message: "Wrong answer in test #1\n\nA wrong number of files with articles was found.\
-    \ \n0 files were found, 8 files were expected."
-  time: Sun, 25 Jul 2021 23:35:02 UTC
-record: 3
+  message: Congratulations!
+  time: Mon, 26 Jul 2021 17:04:01 UTC
+record: 4
