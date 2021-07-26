@@ -160,5 +160,5 @@ files:
         WebScraperTest().run_tests()
   learner_created: false
 feedback_link: https://hyperskill.org/projects/145/stages/785/implement#comment
-status: Unchecked
-record: -1
+status: Failed
+record: 3

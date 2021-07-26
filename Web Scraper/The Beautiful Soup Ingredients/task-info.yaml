@@ -1,47 +1,10 @@
 type: edu
 files:
-- name: scraper.py
+- name: engine/core.py
   visible: true
-  text: |-
-    """Module: Web Scraper"""
-    import json
-    import requests
-
-
-    class MyRequest:
-        def __init__(self, url: str):
-            self.url = url
-            self.response = requests.get(url)
-            self.raw = self.response.json()
-
-        def content(self):
-            try:
-                content = self.raw.get('content', None)
-                assert content is not None
-                print(content)
-            except AssertionError:
-                print("Invalid quote resource!")
-
-
-    def get_content(url: str):
-        r = requests.get(url)
-        requested_json = json.loads(r.text)
-        try:
-            content = requested_json.get('content', None)
-            assert content is not None
-            print(content)
-        except AssertionError:
-            print("Invalid quote resource!")
-
-
-    if __name__ == "__main__":
-        link = input()
-        # myRequest = MyRequest(link)
-        # myRequest.content()
-        get_content(link)
-  learner_created: false
+  learner_created: true
 - name: tests.py
-  visible: false
+  visible: true
   text: "import ast\nimport re\n\nfrom hstest.check_result import CheckResult\nfrom\
     \ hstest.stage_test import StageTest\nfrom hstest.test_case import TestCase\n\n\
     \nclass WebScraperTest(StageTest):\n    def generate(self):\n        return [TestCase(stdin=\"\
@@ -109,10 +72,17 @@ files:
     \            return CheckResult.correct()\n        else:\n            return CheckResult.wrong(\"\
     Title or description in returned dict do not seem to be correct.\")\n\n\nif __name__\
     \ == '__main__':\n    WebScraperTest().run_tests()\n"
+  learner_created: true
+- name: scraper.py
+  visible: true
   learner_created: false
 feedback_link: https://hyperskill.org/projects/145/stages/782/implement#comment
-status: Solved
+status: Failed
 feedback:
-  message: Congratulations!
-  time: Thu, 22 Jul 2021 23:32:09 UTC
-record: 1
+  message: |-
+    Wrong answer in test #1
+
+    Output dictionary was expected.
+    However, it was not found.
+  time: Sun, 25 Jul 2021 22:46:23 UTC
+record: 2
